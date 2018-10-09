@@ -1,0 +1,81 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf600
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red25\green28\blue31;\red237\green237\blue237;}
+{\*\expandedcolortbl;;\cssrgb\c12941\c14510\c16078;\cssrgb\c94510\c94510\c94510;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sl320\partightenfactor0
+
+\f0\fs28 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 # Install Homebrew if you haven't done it yet\
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"\
+\
+# Make sure we\'92re using the latest Homebrew\
+brew update\
+\
+# Upgrade any already-installed formulae\
+brew upgrade\
+\
+# Install GNU core utilities (those that come with OS X are outdated)\
+brew install coreutils\
+\
+# Install dev tools\
+brew install php\
+brew install mysql\
+brew install postgresql\
+brew install redis\
+brew install composer\
+composer global require laravel/valet\
+export PATH=$PATH:~/.composer/vendor/bin\
+valet install\
+sudo php /usr/lib/php/install-pear-nozlib.phar -d /usr/local/lib/php -b /usr/local/bin\
+pecl install xdebug\
+brew install yarn\
+brew install node\
+brew install awscli\
+brew install wget\
+\
+# Start the ssh-agent so we don't have to repeatedly install\
+eval "$(ssh-agent -s)"\
+ssh-add ~/.ssh/id_rsa\
+\
+# Config Xdebug\
+# zend_extension=xdebug.so <- We already have it in our php.ini. It was causing error: \
+# "Cannot load Xdebug - it was already loaded"\
+\
+\
+echo "xdebug.var_display_max_data = -1\
+xdebug.var_display_max_depth = 100\
+xdebug.default_enable = 0\
+xdebug.remote_enable = 1\
+xdebug.remote_connect_back = 1\
+xdebug.remote_port = 9001\
+xdebug.remote_host = localhost\
+xdebug.remote_autostart = 1\
+xdebug.remote_handler = dbgp\
+xdebug.idekey = PHPSTORM\
+xdebug.collect_return = 1\
+xdebug.collect_params = 10\
+xdebug.show_mem_delta = 1\
+xdebug.profiler_enable_trigger = 1\
+xdebug.profiler_output_dir = '/Users/mikezaloznyy/projects\
+/Users/mikezaloznyy/projects\
+/Users/mikezaloznyy/projects/dir/xdebug_profiler'\
+xdebug.trace_enable_trigger = 1\
+xdebug.trace_output_dir = '/Users/mikezaloznyy/projects\
+/Users/mikezaloznyy/projects\
+/Users/mikezaloznyy/projects/dir/xdebug_traces'\
+xdebug.profiler_enable = 0\
+xdebug.trace_enable = 1\
+xdebug.cli_color = 1\
+xdebug.remote_log = '/Users/mikezaloznyy/projects\
+/Users/mikezaloznyy/projects\
+/Users/mikezaloznyy/projects/dir/xdebug_remote.log'" > /usr/local/etc/php/7.2/conf.d/ext-xdebug.ini\
+\
+brew services restart php\
+brew services restart mysql@5.7\
+brew services restart redis\
+\
+# Remove outdated versions from the cellar\
+brew cleanup\
+}
